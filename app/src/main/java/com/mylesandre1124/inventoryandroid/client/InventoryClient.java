@@ -51,7 +51,11 @@ public class InventoryClient extends Client{
         return client.getInventory(barcode).execute().body();
     }
 
-    //public
+    public Inventory addInventory(long barcode)
+    {
+        Call<Inventory> inventory = client.addToInventory(barcode);
+        return inventory.
+    }
 
     public interface EndpointInventoryInterface
     {
@@ -60,6 +64,9 @@ public class InventoryClient extends Client{
 
         @GET("Inventory/{barcode}")
         Call<Inventory> getInventory(@Path("barcode") long barcode);
+
+        @GET("Inventory/{barcode}/add")
+        Call<Inventory> addToInventory(@Path("barcode") long barcode);
 
         @POST("Inventory")
         Call<Inventory> createInventory(@Body Inventory inventory);
