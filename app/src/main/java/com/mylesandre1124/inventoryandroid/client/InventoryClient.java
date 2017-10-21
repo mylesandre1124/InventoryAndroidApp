@@ -1,5 +1,6 @@
 package com.mylesandre1124.inventoryandroid.client;
 
+import com.mylesandre1124.inventoryandroid.MainInventory;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,8 +22,12 @@ public class InventoryClient extends Client{
         this.client = retrofit.create(EndpointInventoryInterface.class);
     }
 
+    public EndpointInventoryInterface getClient() {
+        return client;
+    }
+
     public ArrayList<Inventory> getAllInventory() {
-        try {
+        /*try {
             Response inventoryCall;
             Inventory inventory;
             client.getAllInventory().enqueue(new Callback<ArrayList<Inventory>>() {
@@ -44,17 +49,19 @@ public class InventoryClient extends Client{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return client.getAllInventory().execute().body();
+        return client.getAllInventory().execute().body();*/
+        return new ArrayList<>();
     }
 
     public Inventory getInventory(long barcode){
-        return client.getInventory(barcode).execute().body();
+        //return client.getInventory(barcode).execute().body();
+        return new Inventory();
     }
 
     public Inventory addInventory(long barcode)
     {
         Call<Inventory> inventory = client.addToInventory(barcode);
-        return inventory.
+        return new Inventory();
     }
 
     public interface EndpointInventoryInterface
@@ -75,9 +82,29 @@ public class InventoryClient extends Client{
         Call<Inventory> updateInventory(@Path("barcode") long barcode, @Body Inventory inventory);
     }
 
-    public static void main(String[] args) throws IOException {
-        InventoryClient client = new InventoryClient();
-        ArrayList<Inventory> inventories = client.getAllInventory();
-        System.out.println(inventories.get(0).getName());
+    public void getText()
+    {
+        Call<Inventory> call = client.getInventory(128L);
+        call(call);
+    }
+
+    public void call(Call call)
+    {
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                System.out.println(response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        InventoryClient inventoryClient = new InventoryClient("", "");
+        inventoryClient.getText();
     }
 }

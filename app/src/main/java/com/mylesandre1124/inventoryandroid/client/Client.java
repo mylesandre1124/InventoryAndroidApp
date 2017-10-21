@@ -21,6 +21,6 @@ public class Client {
         OkHttpClient authorizationClient = new OkHttpClient.Builder()
                 .addInterceptor(new Authorization(username, password))
                 .build();
-        this.retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create(gson)).client(authorizationClient).build();
+        this.retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create(gson)).build();
     }
 }
