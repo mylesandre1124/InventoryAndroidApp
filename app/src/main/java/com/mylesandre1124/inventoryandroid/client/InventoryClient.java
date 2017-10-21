@@ -53,9 +53,8 @@ public class InventoryClient extends Client{
         return new ArrayList<>();
     }
 
-    public Inventory getInventory(long barcode){
-        //return client.getInventory(barcode).execute().body();
-        return new Inventory();
+    public Inventory getInventory(long barcode) throws IOException {
+        return client.getInventory(barcode).execute().body();
     }
 
     public Inventory addInventory(long barcode)
@@ -82,29 +81,9 @@ public class InventoryClient extends Client{
         Call<Inventory> updateInventory(@Path("barcode") long barcode, @Body Inventory inventory);
     }
 
-    public void getText()
-    {
-        Call<Inventory> call = client.getInventory(128L);
-        call(call);
+    public static void main(String[] args) throws IOException {
+        InventoryClient client = new InventoryClient("", "");
+        System.out.println(client.getInventory(11241996L).toString());
     }
 
-    public void call(Call call)
-    {
-        call.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                System.out.println(response.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-
-            }
-        });
-    }
-
-    public static void main(String[] args) {
-        InventoryClient inventoryClient = new InventoryClient("", "");
-        inventoryClient.getText();
-    }
 }

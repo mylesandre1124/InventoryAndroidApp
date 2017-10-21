@@ -12,10 +12,29 @@
         tools:context="com.mylesandre1124.inventoryandroid.MainInventory">
 
     <TextView
-            android:text="TextView"
+            android:layout_height="30dp"
+            android:id="@+id/textView"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="92dp"
+            android:textColor="@android:color/black"
+            android:layout_width="100dp" android:textSize="24sp"/>
+    <Button
+            android:text="Button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-            android:layout_marginLeft="63dp" android:layout_marginStart="63dp" android:layout_marginTop="27dp"
-            android:id="@+id/textView"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="94dp"
+            android:id="@+id/button" android:onClick="getText" android:layout_below="@+id/textView"
+            android:layout_alignRight="@+id/barcode" android:layout_alignEnd="@+id/barcode"
+            android:layout_marginRight="26dp" android:layout_marginEnd="26dp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/barcode" android:inputType="number" android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" android:layout_marginTop="20dp"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp" android:id="@+id/spinner"
+            android:layout_below="@+id/textView" android:layout_centerHorizontal="true"/>
 </RelativeLayout>

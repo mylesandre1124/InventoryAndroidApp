@@ -2,13 +2,19 @@ package com.mylesandre1124.inventoryandroid;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.mylesandre1124.inventoryandroid.client.InventoryClient;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.io.IOException;
 
 public class MainInventory extends AppCompatActivity {
 
@@ -18,26 +24,44 @@ public class MainInventory extends AppCompatActivity {
         setContentView(R.layout.activity_main_inventory);
     }
 
-    TextView view = (TextView)findViewById(R.id.textView);
 
-    public void getText()
-    {
+    public void getText(View view) throws IOException {
         InventoryClient client = new InventoryClient("", "");
-        Call<Inventory> call = client.getClient().getInventory(128L);
-        call(call);
+        EditText barcode = (EditText)findViewById(R.id.barcode);
+        Call call = client.getClient().getInventory(new Long(barcode.getText().toString()).longValue());
+        call.enqueue(new Callback<Inventory>() {
+            @Override
+            public void onResponse(Call<Inventory> call, Response<Inventory> response) {
+                TextView view1 = (TextView) findViewById(R.id.textView);
+                Inventory inventory = response.body();
+                view1.setText(inventory.getName());
+            }
+
+            @Override
+            public void onFailure(Call<Inventory> call, Throwable t) {
+                Toast toast = Toast.makeText(MainInventory.this, "There was a problem connecting to the server", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
+
+        //call(call);
     }
 
-    public void call(Call call)
+    public void updateUI(Call call)
     {
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                System.out.println(response.body().toString());
+                Inventory inventory = (Inventory) response.body();
+                TextView view = (TextView) findViewById(R.id.textView);
+
+                view.setText(inventory.getName());
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-
+                Toast toast = Toast.makeText(MainInventory.this, "There was a problem", Toast.LENGTH_LONG);
+                toast.show();
             }
         });
     }
