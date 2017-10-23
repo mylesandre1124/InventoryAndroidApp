@@ -83,7 +83,8 @@ public class InventoryClient extends Client{
 
     public static void main(String[] args) throws IOException {
         InventoryClient client = new InventoryClient("", "");
-        System.out.println(client.getInventory(11241996L).toString());
+        Response<Inventory> response = client.getClient().addToInventory(11241996).execute();
+        System.out.println(response.);
     }
 
 }
