@@ -1,5 +1,6 @@
 package com.mylesandre1124.inventoryandroid;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,9 +33,21 @@ public class MainInventory extends AppCompatActivity {
         call.enqueue(new Callback<Inventory>() {
             @Override
             public void onResponse(Call<Inventory> call, Response<Inventory> response) {
-                TextView view1 = (TextView) findViewById(R.id.textView);
-                Inventory inventory = response.body();
-                view1.setText(inventory.getName());
+                if(response.code() == 200) {
+                    TextView view1 = (TextView) findViewById(R.id.textView);
+                    Inventory inventory = response.body();
+                    view1.setText(inventory.getName());
+                }
+                else if(response.code() == 409)
+                {
+                    try {
+                        CharSequence message = response.errorBody().string();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.activity_main_inventory), message, Snackbar.LENGTH_INDEFINITE);
+                        snackbar.
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
