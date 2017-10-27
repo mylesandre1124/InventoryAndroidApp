@@ -3,12 +3,14 @@ package com.mylesandre1124.inventoryandroid;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.mylesandre1124.inventoryandroid.client.AuthorizationClient;
 import com.mylesandre1124.inventoryandroid.client.InventoryClient;
 import com.mylesandre1124.inventoryandroid.database.AccessDatabase;
+import com.mylesandre1124.inventoryandroid.database.Database;
 import com.mylesandre1124.inventoryandroid.exceptions.AuthenticationExceptionHandler;
 import com.mylesandre1124.inventoryandroid.models.Credentials;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
@@ -52,10 +54,16 @@ public class MainInventory extends AppCompatActivity {
                 if(response.code() == 200) {
                     AccessDatabase database = new AccessDatabase(MainInventory.this);
                     String authToken = response.body();
+                    Log.i("AuthServe", "Before: " + authToken);
                     database.createRecords(credentials.getUsername(), authToken);
-                    authToken = database.getToken(credentials.getUsername());
-
-                    Toast.makeText(MainInventory.this, authToken, Toast.LENGTH_LONG).show();
+                    String authToken1 = database.getToken();
+                    boolean equal = false;
+                    if(authToken.equals(authToken1))
+                    {
+                        equal = true;
+                    }
+                    Log.i("AuthServe", "After:  " + equal + ": " + authToken1);
+                    Toast.makeText(MainInventory.this, authToken1, Toast.LENGTH_LONG).show();
                 }
                 else if (response.code() == 401)
                 {
@@ -73,8 +81,14 @@ public class MainInventory extends AppCompatActivity {
     public void logout(View view)
     {
         AccessDatabase database = new AccessDatabase(MainInventory.this);
-        database.logout("mylesandre1124");
+        database.logout();
         Toast.makeText(MainInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
+    }
+
+    public AccessDatabase cr()
+    {
+        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        return database;
     }
 
 

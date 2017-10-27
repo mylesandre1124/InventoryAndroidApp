@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.mylesandre1124.inventoryandroid.MainInventory;
 
 public class AccessDatabase {
 
@@ -26,7 +27,7 @@ public class AccessDatabase {
         ContentValues values = new ContentValues();
         values.put(USERNAME, token);
         values.put(TOKEN, token);
-        int id = (int) sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        int id = (int) sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         if (id == -1) {
             sqlDatabase.update(TOKEN_TABLE, values, "username=?", new String[] {username});  // number 1 is the _id here, update to variable for your code
         }
@@ -41,9 +42,9 @@ public class AccessDatabase {
         return icount != 0;
     }
 
-    public void logout(String username)
+    public void logout()
     {
-        sqlDatabase.delete(TOKEN_TABLE,"username=?",new String[]{username});
+        sqlDatabase.delete(TOKEN_TABLE, null, null);
     }
 
     public Cursor selectRecords() {
@@ -55,7 +56,7 @@ public class AccessDatabase {
         }
         return mCursor; // iterate to get each value.
     }
-    public String getToken(String username)
+    public String getToken()
     {
         Cursor cursor = selectRecords();
         String authorizationToken = "";
@@ -69,5 +70,7 @@ public class AccessDatabase {
         }
         return authorizationToken;
     }
+
+
 
 }
