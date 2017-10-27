@@ -1,5 +1,8 @@
 package com.mylesandre1124.inventoryandroid;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.mylesandre1124.inventoryandroid.client.AuthorizationClient;
 import com.mylesandre1124.inventoryandroid.client.InventoryClient;
+import com.mylesandre1124.inventoryandroid.models.Credentials;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,29 +30,59 @@ public class MainInventory extends AppCompatActivity {
         setContentView(R.layout.activity_main_inventory);
     }
 
+    public void login(View view)
+    {
+        AuthorizationClient authorizationClient = new AuthorizationClient();
+        Credentials credentials = new Credentials();
+        EditText usernameField = (EditText) findViewById(R.id.usernameField);
+        EditText passwordField = (EditText) findViewById(R.id.passwordField);
+        credentials.setUsername(usernameField.getText().toString());
+        credentials.setPassword(passwordField.getText().toString());
+        Call<String> loginCall = authorizationClient.getClient().authorizeUser(credentials);
+        loginCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.code() == 200) {
+                    String authToken = response.body();
+                    Toast.makeText(MainInventory.this, authToken, Toast.LENGTH_LONG).show();
+                }
+                else if (response.code() == 401)
+                {
+                    try {
+                        String errorMessage = response.errorBody().string();
+                        Toast unauthorized = Toast.makeText(MainInventory.this, errorMessage, Toast.LENGTH_LONG);
+                        unauthorized.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(MainInventory.this, "Could not connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
 
     public void getText(View view) throws IOException {
-        InventoryClient client = new InventoryClient("", "");
+        /*InventoryClient client = new InventoryClient();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
         EditText barcode = (EditText)findViewById(R.id.barcode);
         Call call = client.getClient().getInventory(new Long(barcode.getText().toString()).longValue());
         call.enqueue(new Callback<Inventory>() {
             @Override
             public void onResponse(Call<Inventory> call, Response<Inventory> response) {
-                if(response.code() == 200) {
-                    TextView view1 = (TextView) findViewById(R.id.textView);
-                    Inventory inventory = response.body();
-                    view1.setText(inventory.getName());
-                }
-                else if(response.code() == 409)
-                {
-                    try {
-                        CharSequence message = response.errorBody().string();
-                        Snackbar snackbar = Snackbar.make(findViewById(R.id.activity_main_inventory), message, Snackbar.LENGTH_INDEFINITE);
-                        snackbar.
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                TextView view1 = (TextView) findViewById(R.id.textView);
+                Inventory inventory = response.body();
+                view1.setText(inventory.getName());
             }
 
             @Override
@@ -57,7 +92,7 @@ public class MainInventory extends AppCompatActivity {
             }
         });
 
-        //call(call);
+        //call(call);*/
     }
 
     public void updateUI(Call call)
@@ -66,9 +101,9 @@ public class MainInventory extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) {
                 Inventory inventory = (Inventory) response.body();
-                TextView view = (TextView) findViewById(R.id.textView);
+                //TextView view = (TextView) findViewById(R.id.textView);
 
-                view.setText(inventory.getName());
+                //view.setText(inventory.getName());
             }
 
             @Override

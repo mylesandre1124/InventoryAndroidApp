@@ -5,22 +5,20 @@ import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by Myles on 10/19/17.
  */
 public class Client {
 
-    private static final String BASE_URL = "http://localhost:8080/Inventory/";
+    private static final String BASE_URL = "http://10.200.85.116:8080/Inventory/";
     Retrofit retrofit;
 
-    public Client(String username, String password) {
+    public Client() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
-        OkHttpClient authorizationClient = new OkHttpClient.Builder()
-                .addInterceptor(new Authorization(username, password))
-                .build();
-        this.retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create(gson)).build();
+        this.retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(ScalarsConverterFactory.create()).addConverterFactory(GsonConverterFactory.create(gson)).build();
     }
 }
