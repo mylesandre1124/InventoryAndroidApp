@@ -33,9 +33,9 @@ public class AuthorizationClient extends Client{
         AuthorizationClient authorizationClient = new AuthorizationClient();
         Credentials credentials = new Credentials();
         credentials.setUsername("mylesandre1124");
-        credentials.setPassword("megamacman11");
+        credentials.setPassword("megamacman1");
         Call<String> authorize = authorizationClient.getClient().authorizeUser(credentials);
-        System.out.println(authorize.execute().body());
+        //System.out.println(authorize.execute().errorBody().string());
     }
 
 }

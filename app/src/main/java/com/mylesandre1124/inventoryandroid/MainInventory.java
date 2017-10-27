@@ -1,19 +1,15 @@
 package com.mylesandre1124.inventoryandroid;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.support.design.widget.Snackbar;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.mylesandre1124.inventoryandroid.client.AuthorizationClient;
 import com.mylesandre1124.inventoryandroid.client.InventoryClient;
+import com.mylesandre1124.inventoryandroid.database.AccessDatabase;
+import com.mylesandre1124.inventoryandroid.exceptions.AuthenticationExceptionHandler;
 import com.mylesandre1124.inventoryandroid.models.Credentials;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
 import okhttp3.Headers;
@@ -29,39 +25,56 @@ public class MainInventory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_inventory);
+        if(checkIfLoggedIn())
+        {
+            //Intent intent = new Intent();
+            Toast.makeText(MainInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public boolean checkIfLoggedIn()
+    {
+        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        return database.checkIfLoggedIn();
     }
 
     public void login(View view) throws IOException {
-        /*AuthorizationClient authorizationClient = new AuthorizationClient();
-        Credentials credentials = new Credentials();
+        AuthorizationClient authorizationClient = new AuthorizationClient();
+        final Credentials credentials = new Credentials();
         EditText usernameField = (EditText) findViewById(R.id.usernameField);
         EditText passwordField = (EditText) findViewById(R.id.passwordField);
         credentials.setUsername(usernameField.getText().toString());
         credentials.setPassword(passwordField.getText().toString());
-        Call<String> loginCall = authorizationClient.getClient().authorizeUser(credentials);*/
-        InventoryClient inventoryClient = new InventoryClient();
-        Call<Inventory> loginCall = inventoryClient.getClient().getInventory(1L);
-        loginCall.enqueue(new Callback<Inventory>() {
+        Call<String> loginCall = authorizationClient.getClient().authorizeUser(credentials);
+        loginCall.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Inventory> call, Response<Inventory> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if(response.code() == 200) {
-                    //String authToken = response.body();
-                    //Toast.makeText(MainInventory.this, authToken, Toast.LENGTH_LONG).show();
-                }
-                else if (response.code() == 409)
-                {
-                    convertToException(response);
-                    /*String errorMessage = response.errorBody().string();
-                    Toast unauthorized = Toast.makeText(MainInventory.this, errorMessage, Toast.LENGTH_LONG);
-                    unauthorized.show();*/
+                    AccessDatabase database = new AccessDatabase(MainInventory.this);
+                    String authToken = response.body();
+                    database.createRecords(credentials.getUsername(), authToken);
+                    authToken = database.getToken(credentials.getUsername());
 
+                    Toast.makeText(MainInventory.this, authToken, Toast.LENGTH_LONG).show();
+                }
+                else if (response.code() == 401)
+                {
+                    AuthenticationExceptionHandler exceptionHandler = new AuthenticationExceptionHandler(response);
+                    exceptionHandler.createExceptionToast(MainInventory.this);
                 }
             }
             @Override
-            public void onFailure(Call<Inventory> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(MainInventory.this, "Could not connect to server", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void logout(View view)
+    {
+        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        database.logout("mylesandre1124");
+        Toast.makeText(MainInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
     }
 
 
@@ -73,26 +86,10 @@ public class MainInventory extends AppCompatActivity {
             int errorCode = response.code();
             String errorMessage = response.errorBody().string();
             Headers headers = response.headers();
-            headers.get()
+            headers.get("");
             if(errorCode == 409)
             {
-                AlertDialog.Builder errorDialogBuilder = new AlertDialog.Builder(MainInventory.this);
-                errorDialogBuilder.setMessage(errorMessage + "Are you sure you want to scan this item?");
-                errorDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(MainInventory.this, "Yes", Toast.LENGTH_LONG).show();
 
-                    }
-                });
-                errorDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(MainInventory.this, "No", Toast.LENGTH_LONG).show();
-                    }
-                });
-                AlertDialog errorDialog = errorDialogBuilder.create();
-                errorDialog.show();
             }
         } catch (IOException e) {
             e.printStackTrace();

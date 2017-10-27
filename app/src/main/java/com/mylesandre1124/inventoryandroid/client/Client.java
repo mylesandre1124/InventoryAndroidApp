@@ -12,7 +12,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 public class Client {
 
-    private static final String BASE_URL = "http://10.100.95.39:8080/Inventory/";
+    private static final String BASE_URL = "http://10.80.22.147:8080/Inventory/";
     Retrofit retrofit;
 
     public Client() {
