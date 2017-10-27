@@ -2,6 +2,7 @@ package com.mylesandre1124.inventoryandroid.client;
 
 import com.mylesandre1124.inventoryandroid.MainInventory;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,8 +83,8 @@ public class InventoryClient extends Client{
 
     public static void main(String[] args) throws IOException {
         InventoryClient client = new InventoryClient();
-        Response<Inventory> response = client.getClient().addToInventory(11241996).execute();
-        System.out.println(response);
+        Response<Inventory> response = client.getClient().getInventory(11241996).execute();
+        System.out.println();
     }
 
 }
