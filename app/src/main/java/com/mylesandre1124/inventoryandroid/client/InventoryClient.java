@@ -17,8 +17,7 @@ public class InventoryClient extends Client{
 
     private EndpointInventoryInterface client;
 
-    public InventoryClient(String username, String password) {
-        super(username, password);
+    public InventoryClient() {
         this.client = retrofit.create(EndpointInventoryInterface.class);
     }
 
@@ -82,9 +81,9 @@ public class InventoryClient extends Client{
     }
 
     public static void main(String[] args) throws IOException {
-        InventoryClient client = new InventoryClient("", "");
+        InventoryClient client = new InventoryClient();
         Response<Inventory> response = client.getClient().addToInventory(11241996).execute();
-        System.out.println(response.);
+        System.out.println(response);
     }
 
 }
