@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import com.mylesandre1124.inventoryandroid.MainInventory;
 
 public class AccessDatabase {
@@ -27,7 +28,16 @@ public class AccessDatabase {
         ContentValues values = new ContentValues();
         values.put(USERNAME, username);
         values.put(TOKEN, token);
-        sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        /*int code = (int)sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        if(code == -1)
+        {*/
+        if(!checkIfLoggedIn()) {
+            sqlDatabase.insert(TOKEN_TABLE, null, values);
+        }
+        /*}
+        else {
+            sqlDatabase.update(TOKEN_TABLE, values, "username=?", new String[]{username});
+        }*/
     }
 
     public boolean checkIfLoggedIn()
@@ -36,6 +46,7 @@ public class AccessDatabase {
         Cursor mcursor = sqlDatabase.rawQuery(count, null);
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
+        Log.i("AuthServe", "" + icount);
         return icount != 0;
     }
 
@@ -57,8 +68,13 @@ public class AccessDatabase {
     {
         Cursor cursor = selectRecords();
         String authorizationToken = "";
+        Log.i("AuthServe", checkIfLoggedIn() + "");
         try {
-            while (cursor.moveToNext()) {
+            while (!cursor.isLast()) {
+                int index = cursor.getColumnIndex(TOKEN);
+                Log.i("AuthServe", "" + index);
+                Log.i("AuthServe", cursor.getColumnName(index));
+                Log.i("AuthServe", "" + cursor.getString(index));
                 authorizationToken = cursor.getString(cursor.getColumnIndex(TOKEN));
             }
         }

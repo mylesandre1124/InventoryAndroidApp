@@ -15,5 +15,10 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="Android SQLite" uuid="074fccb1-2a44-4ea1-bd94-10b4e33ef13e">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$USER_HOME$/Library/Caches/IntelliJIdea2017.2/android/databases/EMULATOR_Nexus_6P_API_27/com.mylesandre1124.inventoryandroid/internal/Token</jdbc-url>
+    </data-source>
   </component>
 </project>

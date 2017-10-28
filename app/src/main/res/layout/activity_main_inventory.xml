@@ -38,4 +38,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp" android:id="@+id/button"
             android:onClick="logout" android:layout_below="@+id/loginButton" android:layout_centerHorizontal="true"/>
+    <Button
+            android:text="Get"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_below="@+id/loginButton"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:layout_marginTop="15dp"
+            android:id="@+id/button2" android:onClick="getRecords"/>
+    <Button
+            android:text="Create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_alignTop="@+id/button"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:layout_marginTop="13dp"
+            android:id="@+id/button3" android:onClick="create"/>
 </RelativeLayout>

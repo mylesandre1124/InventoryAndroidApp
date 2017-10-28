@@ -55,8 +55,7 @@ public class MainInventory extends AppCompatActivity {
                     AccessDatabase database = new AccessDatabase(MainInventory.this);
                     String authToken = response.body();
                     Log.i("AuthServe", "Before: " + authToken);
-                    String username = credentials.getUsername();
-                    database.createRecords(username, authToken);
+                    database.createRecords(credentials.getUsername(), authToken);
                     String authToken1 = database.getToken();
                     boolean equal = false;
                     if(authToken.equals(authToken1))
@@ -79,11 +78,30 @@ public class MainInventory extends AppCompatActivity {
         });
     }
 
+    public void getRecords(View view)
+    {
+        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        String token = database.getToken();
+        Log.i("AuthServe", token);
+    }
+
+    public void create(View view)
+    {
+        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        database.createRecords("mylesandre1124", "3dcc6d0dbc0f11e7a98742010a8005443dcc6d24bc0f11e7a98742010a8005443dcc6d4bbc0f11e7a98742010a80054");
+    }
+
     public void logout(View view)
     {
         AccessDatabase database = new AccessDatabase(MainInventory.this);
         database.logout();
         Toast.makeText(MainInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
+    }
+
+    public AccessDatabase cr()
+    {
+        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        return database;
     }
 
 
