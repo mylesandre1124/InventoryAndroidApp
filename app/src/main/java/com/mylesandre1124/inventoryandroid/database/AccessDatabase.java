@@ -25,12 +25,9 @@ public class AccessDatabase {
     public void createRecords(String username, String token)
     {
         ContentValues values = new ContentValues();
-        values.put(USERNAME, token);
+        values.put(USERNAME, username);
         values.put(TOKEN, token);
-        int id = (int) sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        if (id == -1) {
-            sqlDatabase.update(TOKEN_TABLE, values, "username=?", new String[] {username});  // number 1 is the _id here, update to variable for your code
-        }
+        sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public boolean checkIfLoggedIn()

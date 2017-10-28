@@ -55,7 +55,8 @@ public class MainInventory extends AppCompatActivity {
                     AccessDatabase database = new AccessDatabase(MainInventory.this);
                     String authToken = response.body();
                     Log.i("AuthServe", "Before: " + authToken);
-                    database.createRecords(credentials.getUsername(), authToken);
+                    String username = credentials.getUsername();
+                    database.createRecords(username, authToken);
                     String authToken1 = database.getToken();
                     boolean equal = false;
                     if(authToken.equals(authToken1))
@@ -83,12 +84,6 @@ public class MainInventory extends AppCompatActivity {
         AccessDatabase database = new AccessDatabase(MainInventory.this);
         database.logout();
         Toast.makeText(MainInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
-    }
-
-    public AccessDatabase cr()
-    {
-        AccessDatabase database = new AccessDatabase(MainInventory.this);
-        return database;
     }
 
 

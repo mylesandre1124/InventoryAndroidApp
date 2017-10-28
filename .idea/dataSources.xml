@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Google Cloud" uuid="33f2147d-2f19-4240-a810-084beab1a384">
+    <data-source source="LOCAL" name="Google Cloud" uuid="a70e4769-52e0-49bd-8d48-efbae9e9db2a">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
@@ -14,11 +14,6 @@
         <property name="characterSetResults" value="utf8" />
         <property name="yearIsDateType" value="false" />
       </driver-properties>
-    </data-source>
-    <data-source source="LOCAL" name="Android SQLite" uuid="14da1ca9-fb5d-4f3d-9767-9cafb29ec6bb">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$USER_HOME$/Library/Caches/IntelliJIdea2017.2/android/databases/SERIAL_NUMBER_d90be31f/com.mylesandre1124.inventoryandroid/internal/Token</jdbc-url>
     </data-source>
   </component>
 </project>
