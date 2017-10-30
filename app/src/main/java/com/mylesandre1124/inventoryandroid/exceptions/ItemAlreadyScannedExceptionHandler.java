@@ -2,9 +2,6 @@ package com.mylesandre1124.inventoryandroid.exceptions;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.widget.Toast;
-import com.mylesandre1124.inventoryandroid.MainInventory;
 import okhttp3.Headers;
 import retrofit2.Response;
 

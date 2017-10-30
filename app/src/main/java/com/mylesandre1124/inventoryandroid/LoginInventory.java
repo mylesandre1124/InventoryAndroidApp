@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.mylesandre1124.inventoryandroid.client.AuthorizationClient;
-import com.mylesandre1124.inventoryandroid.client.InventoryClient;
 import com.mylesandre1124.inventoryandroid.database.AccessDatabase;
-import com.mylesandre1124.inventoryandroid.database.Database;
 import com.mylesandre1124.inventoryandroid.exceptions.AuthenticationExceptionHandler;
 import com.mylesandre1124.inventoryandroid.models.Credentials;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
@@ -21,22 +19,21 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
-public class MainInventory extends AppCompatActivity {
+public class LoginInventory extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_inventory);
-        if(checkIfLoggedIn())
-        {
-            //Intent intent = new Intent();
-            Toast.makeText(MainInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
+        setContentView(R.layout.activity_login_inventory);
+        if(checkIfLoggedIn()) {
+            Intent mainIntent = new Intent(LoginInventory.this, MainActivity.class);
+            startActivity(mainIntent);
         }
     }
 
     public boolean checkIfLoggedIn()
     {
-        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        AccessDatabase database = new AccessDatabase(LoginInventory.this);
         return database.checkIfLoggedIn();
     }
 
@@ -52,55 +49,41 @@ public class MainInventory extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.code() == 200) {
-                    AccessDatabase database = new AccessDatabase(MainInventory.this);
+                    AccessDatabase database = new AccessDatabase(LoginInventory.this);
                     String authToken = response.body();
                     Log.i("AuthServe", "Before: " + authToken);
                     database.createRecords(credentials.getUsername(), authToken);
-                    String authToken1 = database.getToken();
-                    boolean equal = false;
-                    if(authToken.equals(authToken1))
-                    {
-                        equal = true;
+                    Log.i("AuthServe", "After: " + database.getToken());
+                    if(checkIfLoggedIn()) {
+                        Intent mainIntent = new Intent(LoginInventory.this, MainActivity.class);
+                        startActivity(mainIntent);
                     }
-                    Log.i("AuthServe", "After:  " + equal + ": " + authToken1);
-                    Toast.makeText(MainInventory.this, authToken1, Toast.LENGTH_LONG).show();
+
                 }
                 else if (response.code() == 401)
                 {
                     AuthenticationExceptionHandler exceptionHandler = new AuthenticationExceptionHandler(response);
-                    exceptionHandler.createExceptionToast(MainInventory.this);
+                    exceptionHandler.createExceptionToast(LoginInventory.this);
                 }
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(MainInventory.this, "Could not connect to server", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginInventory.this, "Could not connect to server", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public void getRecords(View view)
-    {
-        AccessDatabase database = new AccessDatabase(MainInventory.this);
-        String token = database.getToken();
-        Log.i("AuthServe", token);
-    }
-
-    public void create(View view)
-    {
-        AccessDatabase database = new AccessDatabase(MainInventory.this);
-        database.createRecords("mylesandre1124", "3dcc6d0dbc0f11e7a98742010a8005443dcc6d24bc0f11e7a98742010a8005443dcc6d4bbc0f11e7a98742010a80054");
-    }
 
     public void logout(View view)
     {
-        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        AccessDatabase database = new AccessDatabase(LoginInventory.this);
         database.logout();
-        Toast.makeText(MainInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginInventory.this, checkIfLoggedIn() +"", Toast.LENGTH_LONG).show();
     }
 
     public AccessDatabase cr()
     {
-        AccessDatabase database = new AccessDatabase(MainInventory.this);
+        AccessDatabase database = new AccessDatabase(LoginInventory.this);
         return database;
     }
 
@@ -145,7 +128,7 @@ public class MainInventory extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Inventory> call, Throwable t) {
-                Toast toast = Toast.makeText(MainInventory.this, "There was a problem connecting to the server", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(LoginInventory.this, "There was a problem connecting to the server", Toast.LENGTH_LONG);
                 toast.show();
             }
         });
@@ -166,7 +149,7 @@ public class MainInventory extends AppCompatActivity {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Toast toast = Toast.makeText(MainInventory.this, "There was a problem", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(LoginInventory.this, "There was a problem", Toast.LENGTH_LONG);
                 toast.show();
             }
         });

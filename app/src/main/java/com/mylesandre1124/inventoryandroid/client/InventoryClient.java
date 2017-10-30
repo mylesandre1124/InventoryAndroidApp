@@ -1,10 +1,7 @@
 package com.mylesandre1124.inventoryandroid.client;
 
-import com.mylesandre1124.inventoryandroid.MainInventory;
 import com.mylesandre1124.inventoryandroid.models.Inventory;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.*;
 
@@ -53,14 +50,13 @@ public class InventoryClient extends Client{
         return new ArrayList<>();
     }
 
-    public Inventory getInventory(long barcode) throws IOException {
-        return client.getInventory(barcode).execute().body();
+    public Call<Inventory> getInventory(long barcode) {
+        return client.getInventory(barcode);
     }
 
-    public Inventory addInventory(long barcode)
+    public Call<Inventory> addInventory(String authToken, long barcode)
     {
-        Call<Inventory> inventory = client.addToInventory(barcode);
-        return new Inventory();
+        return client.addToInventory(authToken, barcode);
     }
 
     public interface EndpointInventoryInterface
@@ -72,7 +68,7 @@ public class InventoryClient extends Client{
         Call<Inventory> getInventory(@Path("barcode") long barcode);
 
         @GET("Inventory/{barcode}/add")
-        Call<Inventory> addToInventory(@Path("barcode") long barcode);
+        Call<Inventory> addToInventory(@Header("Authorization") String token, @Path("barcode") long barcode);
 
         @POST("Inventory")
         Call<Inventory> createInventory(@Body Inventory inventory);

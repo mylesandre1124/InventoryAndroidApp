@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.mylesandre1124.inventoryandroid.MainInventory;
 
 public class AccessDatabase {
 
@@ -28,16 +27,12 @@ public class AccessDatabase {
         ContentValues values = new ContentValues();
         values.put(USERNAME, username);
         values.put(TOKEN, token);
-        /*int code = (int)sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        int code = (int)sqlDatabase.insertWithOnConflict(TOKEN_TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
         if(code == -1)
-        {*/
-        if(!checkIfLoggedIn()) {
-            sqlDatabase.insert(TOKEN_TABLE, null, values);
+        {
+            sqlDatabase.replace(TOKEN_TABLE, null, values);
         }
-        /*}
-        else {
-            sqlDatabase.update(TOKEN_TABLE, values, "username=?", new String[]{username});
-        }*/
+
     }
 
     public boolean checkIfLoggedIn()
@@ -57,8 +52,7 @@ public class AccessDatabase {
 
     public Cursor selectRecords() {
         String[] cols = new String[] {TOKEN};
-        Cursor mCursor = sqlDatabase.query(true,TOKEN_TABLE,cols,null
-                , null, null, null, null, null);
+        Cursor mCursor = /*sqlDatabase.rawQuery("SELECT token FROM Token", null);//*/sqlDatabase.query(TOKEN_TABLE,cols, null, null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -67,20 +61,8 @@ public class AccessDatabase {
     public String getToken()
     {
         Cursor cursor = selectRecords();
-        String authorizationToken = "";
-        Log.i("AuthServe", checkIfLoggedIn() + "");
-        try {
-            while (!cursor.isLast()) {
-                int index = cursor.getColumnIndex(TOKEN);
-                Log.i("AuthServe", "" + index);
-                Log.i("AuthServe", cursor.getColumnName(index));
-                Log.i("AuthServe", "" + cursor.getString(index));
-                authorizationToken = cursor.getString(cursor.getColumnIndex(TOKEN));
-            }
-        }
-        finally {
-            cursor.close();
-        }
+        String authorizationToken = cursor.getString(0);
+        cursor.close();
         return authorizationToken;
     }
 

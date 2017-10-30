@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.mylesandre1124.inventoryandroid.MainActivity">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:background="@android:color/holo_blue_light">
+
+        <TextView
+                android:text="Price:"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:id="@+id/textView6"
+                android:textSize="20dp"
+                android:foregroundGravity="center" android:gravity="center"
+                android:layout_alignLeft="@+id/textView" android:layout_alignStart="@+id/textView"
+                android:layout_alignBottom="@+id/inventoryPrice" android:layout_alignTop="@+id/inventoryPrice"
+                android:textColor="@android:color/black"/>
+        <TextView
+                android:text="Name:"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:id="@+id/textView3"
+                android:layout_alignBottom="@+id/inventoryName" android:layout_alignLeft="@+id/barcode"
+                android:layout_alignStart="@+id/barcode" android:textSize="20dp"
+                android:layout_alignTop="@+id/inventoryName" android:foregroundGravity="center" android:gravity="center"
+                android:textColor="@android:color/black"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp" android:layout_marginTop="33dp" android:id="@+id/barcode"
+                android:hint="Barcode:"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black" android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:textSize="25dp"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:ems="10"
+                android:layout_marginRight="20dp" android:layout_marginEnd="20dp"
+                android:layout_marginTop="21dp" android:id="@+id/inventoryName"
+                android:layout_below="@+id/barcode" android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" android:editable="false"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginTop="18dp" android:id="@+id/inventoryVendor"
+                android:editable="false" android:layout_below="@+id/inventoryName"
+                android:layout_alignLeft="@+id/inventoryName" android:layout_alignStart="@+id/inventoryName"
+                android:inputType="none"/>
+        <EditText
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/inventoryCount"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/inventoryPrice" android:layout_alignRight="@+id/inventoryPrice"
+                android:layout_alignEnd="@+id/inventoryPrice" android:editable="false" android:inputType="none"/>
+        <TextView
+                android:text="Vendor:"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:id="@+id/textView"
+                android:textSize="20dp"
+                android:foregroundGravity="center" android:gravity="center"
+                android:layout_alignLeft="@+id/textView3" android:layout_alignStart="@+id/textView3"
+                android:layout_above="@+id/inventoryPrice" android:layout_alignTop="@+id/inventoryVendor"
+                android:textColor="@android:color/black"/>
+        <TextView
+                android:text="Count:"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:id="@+id/textView4"
+                android:textSize="20dp"
+                android:foregroundGravity="center" android:gravity="center"
+                android:layout_alignTop="@+id/inventoryCount" android:layout_alignLeft="@+id/textView6"
+                android:layout_alignStart="@+id/textView6" android:layout_alignBottom="@+id/inventoryCount"
+                android:textColor="@android:color/black"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:ems="10"
+                android:id="@+id/inventoryPrice"
+                android:layout_marginTop="15dp"
+                android:editable="false" android:layout_below="@+id/inventoryVendor"
+                android:layout_alignLeft="@+id/inventoryVendor" android:layout_alignStart="@+id/inventoryVendor"/>
+        <Button
+                android:text="UPDATE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+                android:layout_alignRight="@+id/inventoryCount" android:layout_alignEnd="@+id/inventoryCount"
+                android:layout_marginBottom="38dp" android:id="@+id/update"/>
+        <Button
+                android:text="Enter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:layout_below="@+id/inventoryCount"
+                android:layout_alignRight="@+id/inventoryCount" android:layout_alignEnd="@+id/inventoryCount"
+                android:id="@+id/button112545" android:onClick="addInventory"/>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
