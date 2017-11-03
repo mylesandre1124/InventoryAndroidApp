@@ -59,6 +59,13 @@ public class InventoryClient extends Client{
         return client.addToInventory(authToken, barcode);
     }
 
+    public Call<Inventory> subInventory(String authToken, long barcode)
+    {
+        return client.subFromInventory(authToken, barcode);
+    }
+
+
+
     public interface EndpointInventoryInterface
     {
         @GET("Inventory")
@@ -69,6 +76,9 @@ public class InventoryClient extends Client{
 
         @GET("Inventory/{barcode}/add")
         Call<Inventory> addToInventory(@Header("Authorization") String token, @Path("barcode") long barcode);
+
+        @GET("Inventory/{barcode}/sub")
+        Call<Inventory> subFromInventory(@Header("Authorization") String token, @Path("barcode") long barcode);
 
         @POST("Inventory")
         Call<Inventory> createInventory(@Body Inventory inventory);

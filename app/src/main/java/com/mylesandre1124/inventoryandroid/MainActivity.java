@@ -10,9 +10,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.mylesandre1124.inventoryandroid.client.InventoryClient;
 import com.mylesandre1124.inventoryandroid.database.AccessDatabase;
 import com.mylesandre1124.inventoryandroid.database.Database;
@@ -32,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        createSpinnerItems();
         EditText barcode = (EditText) findViewById(R.id.barcode);
         barcode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -50,7 +49,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void editInventory(Long barcode)
     {
-        addInventory(barcode);
+        Spinner spinner = (Spinner) findViewById(R.id.changeSpinner);
+        int spinnerPosition = spinner.getSelectedItemPosition();
+        Log.i("AuthServe", spinnerPosition +"");
+        switch (spinnerPosition)
+        {
+            case 0:
+                addInventory(barcode);
+                break;
+            case 1:
+                subInventory(barcode);
+                break;
+
+        }
     }
 
     public void setUIText(Inventory inventory)
@@ -63,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         name.setText(inventory.getName());
         vendor.setText(inventory.getVendor());
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        price.setText("$" + decimalFormat.format(inventory.getPrice()));
+        String priceString = "$" + decimalFormat.format(inventory.getPrice());
+        price.setText(priceString);
         count.setText(String.valueOf(inventory.getCount()));
     }
 
@@ -103,6 +115,42 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void subInventory(Long barcode)
+    {
+        InventoryClient inventoryClient = new InventoryClient();
+        Call<Inventory> subInventoryCall = inventoryClient.subInventory(getAuthorizationToken(), barcode);
+        subInventoryCall.enqueue(new Callback<Inventory>() {
+            @Override
+            public void onResponse(Call<Inventory> call, Response<Inventory> response) {
+                InventoryResponseHandler inventoryResponseHandler = new InventoryResponseHandler(response, MainActivity.this);
+                Inventory inventory = inventoryResponseHandler.handle();
+                if(inventory != null)
+                {
+                    setUIText(inventory);
+                }
+            }
+            @Override
+            public void onFailure(Call<Inventory> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void createSpinnerItems()
+    {
+        Spinner changeSpinner = (Spinner) findViewById(R.id.changeSpinner);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.inventoryChangeList, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        changeSpinner.setAdapter(adapter);
+    }
+
+    public void enterButton(View view)
+    {
+        EditText barcode = (EditText) findViewById(R.id.barcode);
+        Long barcodeLong = Long.parseLong(barcode.getText().toString());
+        editInventory(barcodeLong);
     }
 
 }

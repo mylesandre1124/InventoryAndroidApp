@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
+
             android:layout_below="@+id/usernameField" android:layout_alignRight="@+id/usernameField"
             android:layout_alignEnd="@+id/usernameField" android:layout_marginTop="35dp" android:id="@+id/passwordField"
             android:hint="Password:"/>
@@ -38,4 +39,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp" android:id="@+id/button"
             android:onClick="logout" android:layout_below="@+id/loginButton" android:layout_centerHorizontal="true"/>
+    <RadioButton
+            android:text="Show Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton"
+            android:layout_alignBaseline="@+id/loginButton" android:layout_alignBottom="@+id/loginButton"
+            android:layout_toLeftOf="@+id/loginButton" android:layout_toStartOf="@+id/loginButton"
+            android:layout_marginRight="14dp" android:layout_marginEnd="14dp"/>
 </RelativeLayout>

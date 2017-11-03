@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources layout_width="wrap_content">
+    <string-array name="inventoryChangeList">
+        <item>ADD</item>
+        <item>SUBTRACT</item>
+        <item>SET</item>
+    </string-array>
+</resources>
+
